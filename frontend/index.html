@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TodoApp</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <!-- AUTH PAGE -->
+  <div id="auth-page" class="page active">
+    <div class="auth-bg">
+      <div class="blob blob1"></div>
+      <div class="blob blob2"></div>
+      <div class="blob blob3"></div>
+    </div>
+    <div class="auth-container">
+      <div class="auth-header">
+        <div class="logo">✦ TODO</div>
+        <p class="tagline">Get things done, beautifully.</p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="auth-tabs">
+        <button class="tab-btn active" id="tab-login" onclick="switchTab('login')">Login</button>
+        <button class="tab-btn" id="tab-register" onclick="switchTab('register')">Register</button>
+        <div class="tab-indicator" id="tab-indicator"></div>
+      </div>
+
+      <!-- Login Form -->
+      <form id="login-form" class="auth-form active" onsubmit="handleLogin(event)">
+        <div class="input-group">
+          <label>Email</label>
+          <input type="email" id="login-email" placeholder="you@example.com" required />
+        </div>
+        <div class="input-group">
+          <label>Password</label>
+          <input type="password" id="login-password" placeholder="••••••••" required />
+        </div>
+        <div id="login-error" class="error-msg"></div>
+        <button type="submit" class="btn-primary" id="login-btn">
+          <span class="btn-text">Login</span>
+          <span class="btn-loader hidden">⏳</span>
+        </button>
+      </form>
+
+      <!-- Register Form -->
+      <form id="register-form" class="auth-form" onsubmit="handleRegister(event)">
+        <div class="input-group">
+          <label>Name</label>
+          <input type="text" id="reg-name" placeholder="Your name" required />
+        </div>
+        <div class="input-group">
+          <label>Email</label>
+          <input type="email" id="reg-email" placeholder="you@example.com" required />
+        </div>
+        <div class="input-group">
+          <label>Password</label>
+          <input type="password" id="reg-password" placeholder="Min. 8 characters" required />
+        </div>
+        <div id="register-error" class="error-msg"></div>
+        <div id="register-success" class="success-msg"></div>
+        <button type="submit" class="btn-primary" id="register-btn">
+          <span class="btn-text">Create Account</span>
+          <span class="btn-loader hidden">⏳</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- DASHBOARD PAGE -->
+  <div id="dashboard-page" class="page">
+    <div class="dash-bg">
+      <div class="blob blob4"></div>
+      <div class="blob blob5"></div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="nav-logo">✦ TODO</div>
+      <div class="nav-right">
+        <span class="nav-user" id="nav-username"></span>
+        <button class="btn-logout" onclick="handleLogout()">Logout</button>
+      </div>
+    </nav>
+
+    <div class="dashboard">
+      <!-- Stats Bar -->
+      <div class="stats-bar">
+        <div class="stat">
+          <span class="stat-num" id="stat-total">0</span>
+          <span class="stat-label">Total</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num" id="stat-pending">0</span>
+          <span class="stat-label">Pending</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num" id="stat-done">0</span>
+          <span class="stat-label">Done</span>
+        </div>
+      </div>
+
+      <!-- Add Todo -->
+      <div class="add-todo-card">
+        <h2 class="section-title">New Task</h2>
+        <form onsubmit="handleCreateTodo(event)" id="create-form">
+          <div class="input-row">
+            <input type="text" id="todo-title" placeholder="Task title..." required />
+            <input type="text" id="todo-desc" placeholder="Description (optional)" />
+            <button type="submit" class="btn-add" id="add-btn">+ Add</button>
+          </div>
+          <div id="create-error" class="error-msg"></div>
+        </form>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="filter-tabs">
+        <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+        <button class="filter-btn" onclick="setFilter('pending', this)">Pending</button>
+        <button class="filter-btn" onclick="setFilter('completed', this)">Completed</button>
+      </div>
+
+      <!-- Todo List -->
+      <div id="todo-list" class="todo-list">
+        <div class="empty-state" id="empty-state">
+          <div class="empty-icon">📋</div>
+          <p>No tasks yet. Add one above!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDIT MODAL -->
+  <div id="edit-modal" class="modal-overlay hidden" onclick="closeModal(event)">
+    <div class="modal-card">
+      <h3 class="modal-title">Edit Task</h3>
+      <form onsubmit="handleUpdateTodo(event)">
+        <input type="hidden" id="edit-id" />
+        <div class="input-group">
+          <label>Title</label>
+          <input type="text" id="edit-title" required />
+        </div>
+        <div class="input-group">
+          <label>Description</label>
+          <input type="text" id="edit-desc" />
+        </div>
+        <div class="input-group">
+          <label>Status</label>
+          <select id="edit-completed">
+            <option value="false">Pending</option>
+            <option value="true">Completed</option>
+          </select>
+        </div>
+        <div id="edit-error" class="error-msg"></div>
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" onclick="closeEditModal()">Cancel</button>
+          <button type="submit" class="btn-primary small">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
