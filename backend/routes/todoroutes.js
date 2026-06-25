@@ -9,7 +9,7 @@ const{
     getTodoById,
     updateTodo,
     deleteTodo,
-} = require('../controllers/todoController');
+} = require('../controllers/todocontroller');
 
 router.get('/', authMiddleware, getTodos);
 router.post('/', authMiddleware, createTodo);
