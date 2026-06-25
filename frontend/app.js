@@ -1,7 +1,7 @@
 // =====================
 // CONFIG
 // =====================
-const API_BASE = 'http://localhost:5004';
+const API_BASE = 'https://to-do-project-1-1elz.onrender.com';
 
 // =====================
 // STATE
